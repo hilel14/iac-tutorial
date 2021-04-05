@@ -13,7 +13,7 @@ provider "aws" {
 }
 
 resource "aws_instance" "worker" {
-  ami           = "ami-05479f9c3ec0e2ec9"
+  ami           = "ami-03eaf3b9c3367e75c"
   # spot_price    = var.spot_price
   instance_type = var.instance_type
   count         = var.instance_count
