@@ -64,8 +64,9 @@ resource "aws_security_group" "interview_security_group" {
 # Worker instances
 resource "aws_instance" "worker" {
   #vpc_security_group_ids = [aws_vpc.main.id]
-  subnet_id = aws_subnet.main.id
-  ami = "ami-03eaf3b9c3367e75c"
+  associate_public_ip_address = true
+  subnet_id                   = aws_subnet.main.id
+  ami                         = "ami-03eaf3b9c3367e75c"
   # spot_price    = var.spot_price
   instance_type = var.instance_type
   count         = var.instance_count
@@ -73,4 +74,16 @@ resource "aws_instance" "worker" {
     Name          = "${var.instance_name_prefix}_${count.index}"
     MyDescription = "this is my worker server ${count.index}"
   }
+}
+
+# Incoming queue
+resource "aws_sqs_queue" "in_queue" {
+  name       = "interview-incoming-queue.fifo"
+  fifo_queue = true
+}
+
+# Outgoing queue
+resource "aws_sqs_queue" "out_queue" {
+  name       = "interview-outgoing-queue.fifo"
+  fifo_queue = true
 }
