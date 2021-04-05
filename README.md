@@ -12,3 +12,8 @@ SSH
 
 * Save ssh key as ~/.ssh/interview.pem
 * chmod 400 ~/.ssh/interview.pem
+
+
+## Usefull links
+
+* https://cloud-images.ubuntu.com/locator/ec2/
