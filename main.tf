@@ -103,16 +103,11 @@ resource "aws_instance" "worker" {
 }
 
 # Incoming queue
-
 resource "aws_sqs_queue" "in_queue" {
   name       = "interview-incoming-queue.fifo"
   fifo_queue = true
 }
-/*
-data "aws_sqs_queue" "in_queue" {
-  name = "interview-incoming-queue.fifo"
-}
-*/
+
 # Outgoing queue
 resource "aws_sqs_queue" "out_queue" {
   name       = "interview-outgoing-queue.fifo"
