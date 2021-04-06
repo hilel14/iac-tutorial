@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "aws" {
-  profile = "interview"
+  profile = "default"
   region  = "us-east-1"
 }
 
@@ -67,6 +67,7 @@ resource "aws_instance" "worker" {
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.main.id
   ami                         = "ami-03eaf3b9c3367e75c"
+  key_name                    = "tutorials"
   # spot_price    = var.spot_price
   instance_type = var.instance_type
   count         = var.instance_count
