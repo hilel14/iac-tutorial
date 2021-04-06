@@ -13,6 +13,7 @@ output "instance_public_ip" {
 output "sqs_in" {
   description = "URL of the SQS incomming queue"
   value       = aws_sqs_queue.in_queue.arn
+  #value = data.aws_sqs_queue.in_queue.url
 }
 
 output "sqs_out" {

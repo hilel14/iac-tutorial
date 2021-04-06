@@ -42,10 +42,11 @@ resource "aws_security_group" "interview_security_group" {
   # Allow SSH inbound
   ingress {
     description = "SSH from anyware"
-    from_port   = 0
+    from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [aws_vpc.main.cidr_block]
+    #cidr_blocks = [aws_vpc.main.cidr_block]
+    cidr_blocks = ["0.0.0.0/0"]
   }
   # allow all outbound
   egress {
@@ -61,9 +62,33 @@ resource "aws_security_group" "interview_security_group" {
   }
 }
 
+# Internet gateway
+resource "aws_internet_gateway" "tutorials_gw" {
+  vpc_id = aws_vpc.main.id
+  tags = {
+    Name = "tutorials-gw"
+  }
+}
+
+# Route tables
+resource "aws_route_table" "tutorials_route_table" {
+  vpc_id = aws_vpc.main.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.tutorials_gw.id
+  }
+  tags = {
+    Name = "tutorials-route-table"
+  }
+}
+resource "aws_route_table_association" "subnet_association" {
+  subnet_id      = aws_subnet.main.id
+  route_table_id = aws_route_table.tutorials_route_table.id
+}
+
 # Worker instances
 resource "aws_instance" "worker" {
-  #vpc_security_group_ids = [aws_vpc.main.id]
+  vpc_security_group_ids      = [aws_security_group.interview_security_group.id]
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.main.id
   ami                         = "ami-03eaf3b9c3367e75c"
@@ -78,11 +103,16 @@ resource "aws_instance" "worker" {
 }
 
 # Incoming queue
+
 resource "aws_sqs_queue" "in_queue" {
   name       = "interview-incoming-queue.fifo"
   fifo_queue = true
 }
-
+/*
+data "aws_sqs_queue" "in_queue" {
+  name = "interview-incoming-queue.fifo"
+}
+*/
 # Outgoing queue
 resource "aws_sqs_queue" "out_queue" {
   name       = "interview-outgoing-queue.fifo"
