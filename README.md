@@ -18,3 +18,7 @@ SSH
 
 * https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html#finding-quick-start-ami
 * https://medium.com/@hmalgewatta/setting-up-an-aws-ec2-instance-with-ssh-access-using-terraform-c336c812322f
+
+## Usefull commands
+
+* cloud-init devel schema --config-file ${file.yaml}

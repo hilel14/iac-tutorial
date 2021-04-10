@@ -101,8 +101,8 @@ resource "aws_instance" "worker" {
   key_name                    = "tutorials"
   # spot_price    = var.spot_price
   instance_type = var.instance_type
-  user_data                   = data.template_file.user_data.rendered
-  count         = var.instance_count
+  user_data     = data.template_file.user_data.rendered
+  count = var.instance_count
   tags = {
     Name          = "${var.instance_name_prefix}_${count.index}"
     MyDescription = "this is my worker server ${count.index}"

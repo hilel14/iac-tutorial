@@ -1,5 +1,13 @@
+#cloud-config
+
 # install python dependencies
 runcmd:
   - sudo apt-get update
   - sudo apt-get -y install python3-pip
-  - pip3 install --user boto3
+  - pip3 install boto3
+
+# copy the python script to the vm
+write_files:
+  - content: |
+      import boto3
+    path: /home/ubuntu/work.py
