@@ -86,6 +86,12 @@ resource "aws_route_table_association" "subnet_association" {
   route_table_id = aws_route_table.tutorials_route_table.id
 }
 
+# Prepare resources to be provisioned with Cloud-Init
+
+data "template_file" "user_data" {
+  template = file("add-python-script.yaml")
+}
+
 # Worker instances
 resource "aws_instance" "worker" {
   vpc_security_group_ids      = [aws_security_group.interview_security_group.id]
@@ -95,6 +101,7 @@ resource "aws_instance" "worker" {
   key_name                    = "tutorials"
   # spot_price    = var.spot_price
   instance_type = var.instance_type
+  user_data                   = data.template_file.user_data.rendered
   count         = var.instance_count
   tags = {
     Name          = "${var.instance_name_prefix}_${count.index}"
